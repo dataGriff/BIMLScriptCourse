@@ -1,0 +1,22 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Packages>
+        <Package Name="MyFirstBimlPackage2">
+         <Annotations>
+                <Annotation AnnotationType="Description">This text will be used in documentation and Mist intellisense for MyFirstBimlPackage.</Annotation>
+                <Annotation AnnotationType="Tag" Tag="SubjectMatter">Finance</Annotation>
+                <Annotation AnnotationType="Tag" Tag="IsRestartable">True</Annotation>
+            </Annotations>
+            <Variables>
+                <Variable Name="LoopVariable" DataType="String">abc</Variable>
+            </Variables>
+            <Tasks>
+                <Dataflow Name="Dataflow1" />
+                <ForEachFromVariableLoop Name="Container1" VariableName="MyFirstBimlPackage2.User.LoopVariable">
+                    <Variables>
+                        <Variable Name="LoopVariable" DataType="String">abc</Variable>
+                    </Variables>
+                </ForEachFromVariableLoop>
+            </Tasks>
+        </Package>
+    </Packages>
+</Biml>

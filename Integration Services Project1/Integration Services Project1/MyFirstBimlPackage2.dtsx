@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="02/25/2017 18:41:55" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="GRIFF-PC" DTS:CreatorName="griff182uk" DTS:Description="This text will be used in documentation and Mist intellisense for MyFirstBimlPackage." DTS:DTSID="{E5A4E88C-2BFA-49B1-BB14-9F950964EF0A}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="2057" DTS:ObjectName="MyFirstBimlPackage2" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{6D6F957A-076D-46CD-B67A-78A4754517D6}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{DF6D519C-B37A-4E24-BAF9-DE506850E9CD}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="LoopVariable">
+      <DTS:VariableValue DTS:DataType="8">abc</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="Microsoft.Pipeline" DTS:DTSID="{F6C371FB-31F9-45D1-8631-F6D1EC36508C}" DTS:ExecutableType="Microsoft.Pipeline" DTS:LocaleID="-1" DTS:ObjectName="Dataflow1" DTS:refId="Package\Dataflow1" DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <pipeline BLOBTempStoragePath="" bufferTempStoragePath="" version="1"></pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:FOREACHLOOP" DTS:DTSID="{8DE6EA5B-0D18-497D-AA8D-4C25D61E0BAB}" DTS:ExecutableType="STOCK:FOREACHLOOP" DTS:LocaleID="-1" DTS:ObjectName="Container1" DTS:refId="Package\Container1">
+      <DTS:ForEachEnumerator DTS:CreationName="Microsoft.ForEachFromVarEnumerator" DTS:DTSID="{756702EC-4C13-4E8C-81C4-69333B70B0E5}" DTS:ObjectName="{756702EC-4C13-4E8C-81C4-69333B70B0E5}">
+        <DTS:ObjectData>
+          <FEEFVE VariableName="User::LoopVariable"></FEEFVE>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{E71CAF30-308D-4742-89BF-E018143B3478}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="LoopVariable">
+          <DTS:VariableValue DTS:DataType="8">abc</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>
