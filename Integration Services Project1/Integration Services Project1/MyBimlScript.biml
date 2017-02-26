@@ -1,0 +1,75 @@
+<!--<# var allTableNames = new[] { "DimAccount", "DimCurrency", "DimCustomer", "DimDate", "DimDepartmentGroup", "DimEmployee", "DimGeography", "DimOrganization", "DimProduct", "DimProductCategory", "DimProductSubcategory" }; #>-->
+
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ template language="C#" tier="2" #>
+<#
+    string conn = @"Data Source=GRIFF-PC\SQLEXPRESS2014;Persist Security Info=true;Integrated Security=SSPI;Initial Catalog=AdventureWorksDW2014";
+    string _table_name_sql = "select TABLE_NAME from AdventureWorksDW2014.INFORMATION_SCHEMA.TABLES  where TABLE_TYPE='BASE TABLE' AND TABLE_NAME LIKE '%Dim%'"; 
+     
+    DataTable _table_names = new DataTable();
+    SqlDataAdapter _table_name_da = new SqlDataAdapter(_table_name_sql, conn);
+    _table_name_da.Fill(_table_names);  
+     
+#>
+
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Connections>
+        <OleDbConnection Name="MyConn" ConnectionString="Provider=SQLOLEDB;Data Source=.\SQLEXPRESS2014;Integrated Security=SSPI;Initial Catalog=dktest" />
+    </Connections>
+    <Packages>
+        <Package Name="GriffPackage">
+         <Annotations>
+                <Annotation AnnotationType="Description">This text will be used in documentation and Mist intellisense for MyFirstBimlPackage.</Annotation>
+           
+            </Annotations>
+        
+            <Tasks>
+                <# foreach(DataRow _tableName in _table_names.Rows) {    #> 
+            <Container Name="SEQC Refresh <#= _tableName["TABLE_NAME"]#>">
+              <Variables>
+                <Variable Name="<#= _tableName["TABLE_NAME"]#>Required" DataType="Boolean">True</Variable>
+            </Variables>
+               <Tasks>
+                <ExecuteSQL Name="SQL Check Required <#=_tableName["TABLE_NAME"]#>" ConnectionName="MyConn" ResultSet="SingleRow">
+                    <DirectInput>import.pr_<#=_tableName["TABLE_NAME"]#>_CheckRequired</DirectInput>
+                        <Results>
+                        <Result Name="<#=_tableName["TABLE_NAME"]#>Required" VariableName="User.<#=_tableName["TABLE_NAME"]#>Required" />
+                    </Results>
+                </ExecuteSQL>
+                        <ExecuteSQL Name="SQL Audit Start <#=_tableName["TABLE_NAME"]#>" ConnectionName="MyConn">
+                    <DirectInput>import.pr_<#=_tableName["TABLE_NAME"]#>_AuditStart</DirectInput>
+                        <PrecedenceConstraints>
+                            <Inputs>
+                                <Input OutputPathName="SQL Check Required <#=_tableName["TABLE_NAME"]#>.Output" EvaluationOperation="Expression" Expression="@<#=_tableName["TABLE_NAME"]#>Required"></Input>
+                            </Inputs>
+                        </PrecedenceConstraints>
+                </ExecuteSQL>
+                        <ExecuteSQL Name="SQL Merge <#=_tableName["TABLE_NAME"]#>" ConnectionName="MyConn">
+                    <DirectInput>import.pr_<#=_tableName["TABLE_NAME"]#>_Merge</DirectInput>
+                        <PrecedenceConstraints>
+                            <Inputs>
+                                <Input OutputPathName="SQL Audit Start <#=_tableName["TABLE_NAME"]#>.Output" EvaluationValue="Success"></Input>
+                            </Inputs>
+                        </PrecedenceConstraints>
+                </ExecuteSQL>
+                        <ExecuteSQL Name="SQL Audit End <#=_tableName["TABLE_NAME"]#>" ConnectionName="MyConn">
+                    <DirectInput>import.pr_<#=_tableName["TABLE_NAME"]#>_AuditEnd</DirectInput>
+                        <PrecedenceConstraints>
+                            <Inputs>
+                                <Input OutputPathName="SQL Merge <#=_tableName["TABLE_NAME"]#>.Output" EvaluationValue="Success"></Input>
+                            </Inputs>
+                        </PrecedenceConstraints>
+                </ExecuteSQL>
+                    
+                  </Tasks>
+                    
+                </Container>
+              <# } #>
+                            
+                            
+                            
+            </Tasks>
+        </Package>
+    </Packages>
+</Biml>

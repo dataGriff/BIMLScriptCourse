@@ -1,0 +1,589 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="02/26/2017 15:20:50" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="GRIFF-PC" DTS:CreatorName="griff182uk" DTS:Description="This text will be used in documentation and Mist intellisense for MyFirstBimlPackage." DTS:DTSID="{B027689E-37D6-4C99-A18F-C29EBE1DCCB2}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="2057" DTS:ObjectName="GriffPackage" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{F31B6F64-39E3-42B0-A4D5-108BF66A6525}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager DTS:CreationName="OLEDB" DTS:DTSID="{5124BD1C-EFA7-404D-A29A-4A73238F6A67}" DTS:ObjectName="MyConn" DTS:refId="Package.ConnectionManagers[MyConn]">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager DTS:ConnectionString="provider=SQLOLEDB;data source=.\SQLEXPRESS2014;integrated security=SSPI;initial catalog=dktest"></DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{C4871E70-D916-435B-8A3F-68302CF9BD13}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimAccount" DTS:refId="Package\SEQC Refresh DimAccount">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{E42C86ED-34A4-42CB-8CB6-5184601B0733}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimAccount" DTS:refId="Package\SEQC Refresh DimAccount\SQL Check Required DimAccount" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimAccount_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimAccountRequired" SQLTask:ResultName="DimAccountRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{9CB06304-175D-47A9-92A5-854F54B70559}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimAccount" DTS:refId="Package\SEQC Refresh DimAccount\SQL Audit Start DimAccount" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimAccount_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{F3860D24-25AE-45E0-9454-180ACA9F80F9}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimAccount" DTS:refId="Package\SEQC Refresh DimAccount\SQL Merge DimAccount" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimAccount_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{DBAEDB17-D76F-40FA-9735-357F4C1B1D2C}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimAccount" DTS:refId="Package\SEQC Refresh DimAccount\SQL Audit End DimAccount" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimAccount_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{B12F6CA8-6304-453F-AEDA-53075A23E86C}" DTS:EvalOp="1" DTS:Expression="@DimAccountRequired" DTS:From="Package\SEQC Refresh DimAccount\SQL Check Required DimAccount" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimAccount_To_SQL Audit Start DimAccount" DTS:refId="Package\SEQC Refresh DimAccount.PrecedenceConstraints[Constraint_SQL Check Required DimAccount_To_SQL Audit Start DimAccount]" DTS:To="Package\SEQC Refresh DimAccount\SQL Audit Start DimAccount"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{1844F0D3-77CC-4F9D-B11D-B24C9A2E9966}" DTS:From="Package\SEQC Refresh DimAccount\SQL Audit Start DimAccount" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimAccount_To_SQL Merge DimAccount" DTS:refId="Package\SEQC Refresh DimAccount.PrecedenceConstraints[Constraint_SQL Audit Start DimAccount_To_SQL Merge DimAccount]" DTS:To="Package\SEQC Refresh DimAccount\SQL Merge DimAccount"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{C18B56CA-61CC-4768-8DFF-778BF8874DE1}" DTS:From="Package\SEQC Refresh DimAccount\SQL Merge DimAccount" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimAccount_To_SQL Audit End DimAccount" DTS:refId="Package\SEQC Refresh DimAccount.PrecedenceConstraints[Constraint_SQL Merge DimAccount_To_SQL Audit End DimAccount]" DTS:To="Package\SEQC Refresh DimAccount\SQL Audit End DimAccount"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{C2103CC6-103F-42C4-BB6E-5E1EB301F6F7}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimAccountRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{2F4EDFC5-C957-4751-AF38-1E7F5F81D75B}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimCurrency" DTS:refId="Package\SEQC Refresh DimCurrency">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{82FB2592-7D8D-409C-B871-DC5F985F59B8}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimCurrency" DTS:refId="Package\SEQC Refresh DimCurrency\SQL Check Required DimCurrency" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimCurrency_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimCurrencyRequired" SQLTask:ResultName="DimCurrencyRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{FB5DCE39-831A-45DA-B853-0C035567149B}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimCurrency" DTS:refId="Package\SEQC Refresh DimCurrency\SQL Audit Start DimCurrency" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimCurrency_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{87A221CD-35F6-462C-BB80-9A4A1437A8D1}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimCurrency" DTS:refId="Package\SEQC Refresh DimCurrency\SQL Merge DimCurrency" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimCurrency_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{68B0E430-6314-4616-B525-042E9339AD7B}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimCurrency" DTS:refId="Package\SEQC Refresh DimCurrency\SQL Audit End DimCurrency" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimCurrency_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{7E3F3252-D600-4E10-AF8D-3E23C42CDB71}" DTS:EvalOp="1" DTS:Expression="@DimCurrencyRequired" DTS:From="Package\SEQC Refresh DimCurrency\SQL Check Required DimCurrency" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimCurrency_To_SQL Audit Start DimCurrency" DTS:refId="Package\SEQC Refresh DimCurrency.PrecedenceConstraints[Constraint_SQL Check Required DimCurrency_To_SQL Audit Start DimCurrency]" DTS:To="Package\SEQC Refresh DimCurrency\SQL Audit Start DimCurrency"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{6A00AFBD-AA67-4089-BD81-3E2A99565C10}" DTS:From="Package\SEQC Refresh DimCurrency\SQL Audit Start DimCurrency" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimCurrency_To_SQL Merge DimCurrency" DTS:refId="Package\SEQC Refresh DimCurrency.PrecedenceConstraints[Constraint_SQL Audit Start DimCurrency_To_SQL Merge DimCurrency]" DTS:To="Package\SEQC Refresh DimCurrency\SQL Merge DimCurrency"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{3202A6A5-5800-472C-A454-C884B1470916}" DTS:From="Package\SEQC Refresh DimCurrency\SQL Merge DimCurrency" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimCurrency_To_SQL Audit End DimCurrency" DTS:refId="Package\SEQC Refresh DimCurrency.PrecedenceConstraints[Constraint_SQL Merge DimCurrency_To_SQL Audit End DimCurrency]" DTS:To="Package\SEQC Refresh DimCurrency\SQL Audit End DimCurrency"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{94A8FD74-EFC0-4B0C-AC93-7C5D97C8C13A}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimCurrencyRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{48E61F2A-366F-451E-8FA7-77FEF6EEBBD7}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimCustomer" DTS:refId="Package\SEQC Refresh DimCustomer">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{6D143BF0-48DF-4859-B09F-A675EF41172C}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimCustomer" DTS:refId="Package\SEQC Refresh DimCustomer\SQL Check Required DimCustomer" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimCustomer_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimCustomerRequired" SQLTask:ResultName="DimCustomerRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{26D83198-0EC7-4603-B9D6-B5DBE6D9F09C}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimCustomer" DTS:refId="Package\SEQC Refresh DimCustomer\SQL Audit Start DimCustomer" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimCustomer_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{9863980A-DEC5-411F-BBCC-5A5B7B567BC4}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimCustomer" DTS:refId="Package\SEQC Refresh DimCustomer\SQL Merge DimCustomer" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimCustomer_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{37C45E1C-BFA6-40BA-8E3E-0348BA8ECD9A}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimCustomer" DTS:refId="Package\SEQC Refresh DimCustomer\SQL Audit End DimCustomer" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimCustomer_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{195680C4-B9CB-472F-89BD-2D16E8A4F3F7}" DTS:EvalOp="1" DTS:Expression="@DimCustomerRequired" DTS:From="Package\SEQC Refresh DimCustomer\SQL Check Required DimCustomer" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimCustomer_To_SQL Audit Start DimCustomer" DTS:refId="Package\SEQC Refresh DimCustomer.PrecedenceConstraints[Constraint_SQL Check Required DimCustomer_To_SQL Audit Start DimCustomer]" DTS:To="Package\SEQC Refresh DimCustomer\SQL Audit Start DimCustomer"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{8D3AECAF-F0A1-4C40-8B1A-061AF9477AD5}" DTS:From="Package\SEQC Refresh DimCustomer\SQL Audit Start DimCustomer" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimCustomer_To_SQL Merge DimCustomer" DTS:refId="Package\SEQC Refresh DimCustomer.PrecedenceConstraints[Constraint_SQL Audit Start DimCustomer_To_SQL Merge DimCustomer]" DTS:To="Package\SEQC Refresh DimCustomer\SQL Merge DimCustomer"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{4B3CD420-310C-4B26-B9A9-2AD3DDE7E564}" DTS:From="Package\SEQC Refresh DimCustomer\SQL Merge DimCustomer" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimCustomer_To_SQL Audit End DimCustomer" DTS:refId="Package\SEQC Refresh DimCustomer.PrecedenceConstraints[Constraint_SQL Merge DimCustomer_To_SQL Audit End DimCustomer]" DTS:To="Package\SEQC Refresh DimCustomer\SQL Audit End DimCustomer"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{9C904A7B-273C-4D45-834E-678FCB4E5984}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimCustomerRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{A16C0559-30D9-4C79-AF57-9BCA70E74CC8}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimDate" DTS:refId="Package\SEQC Refresh DimDate">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{03C50993-E8FB-4B7D-BEA4-7070EC6D93D5}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimDate" DTS:refId="Package\SEQC Refresh DimDate\SQL Check Required DimDate" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimDate_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimDateRequired" SQLTask:ResultName="DimDateRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{99CB41E7-F81E-4FC5-98FD-D77C91C969B4}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimDate" DTS:refId="Package\SEQC Refresh DimDate\SQL Audit Start DimDate" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimDate_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{0D94A3E3-112E-4F51-9DBF-4AFCA63B66C0}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimDate" DTS:refId="Package\SEQC Refresh DimDate\SQL Merge DimDate" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimDate_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{7085A76A-5216-46B9-9700-71A544CFD3C3}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimDate" DTS:refId="Package\SEQC Refresh DimDate\SQL Audit End DimDate" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimDate_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{D8A3B6BF-0837-44F9-910A-933A4E5D0C9B}" DTS:EvalOp="1" DTS:Expression="@DimDateRequired" DTS:From="Package\SEQC Refresh DimDate\SQL Check Required DimDate" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimDate_To_SQL Audit Start DimDate" DTS:refId="Package\SEQC Refresh DimDate.PrecedenceConstraints[Constraint_SQL Check Required DimDate_To_SQL Audit Start DimDate]" DTS:To="Package\SEQC Refresh DimDate\SQL Audit Start DimDate"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{C3B629F8-A10A-4ED8-A26C-8F873D32C742}" DTS:From="Package\SEQC Refresh DimDate\SQL Audit Start DimDate" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimDate_To_SQL Merge DimDate" DTS:refId="Package\SEQC Refresh DimDate.PrecedenceConstraints[Constraint_SQL Audit Start DimDate_To_SQL Merge DimDate]" DTS:To="Package\SEQC Refresh DimDate\SQL Merge DimDate"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{A53748F4-B167-4399-B588-2F659A15957B}" DTS:From="Package\SEQC Refresh DimDate\SQL Merge DimDate" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimDate_To_SQL Audit End DimDate" DTS:refId="Package\SEQC Refresh DimDate.PrecedenceConstraints[Constraint_SQL Merge DimDate_To_SQL Audit End DimDate]" DTS:To="Package\SEQC Refresh DimDate\SQL Audit End DimDate"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{6E0653EA-50DC-4ACA-B7E9-6BE5D8F5A447}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimDateRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{55FDAB57-5A4A-49FA-8A6E-18CE78500BDD}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimDepartmentGroup" DTS:refId="Package\SEQC Refresh DimDepartmentGroup">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{066D933E-32C4-4293-8E93-941484D5EEEC}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimDepartmentGroup" DTS:refId="Package\SEQC Refresh DimDepartmentGroup\SQL Check Required DimDepartmentGroup" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimDepartmentGroup_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimDepartmentGroupRequired" SQLTask:ResultName="DimDepartmentGroupRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{7AB35827-4E6F-4944-9AFE-6F7370B44502}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimDepartmentGroup" DTS:refId="Package\SEQC Refresh DimDepartmentGroup\SQL Audit Start DimDepartmentGroup" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimDepartmentGroup_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{3394460A-1BD9-4D00-AE0D-F73AEAE57353}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimDepartmentGroup" DTS:refId="Package\SEQC Refresh DimDepartmentGroup\SQL Merge DimDepartmentGroup" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimDepartmentGroup_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{DD4718ED-8DBA-40E1-BA7C-9BE522A0DA66}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimDepartmentGroup" DTS:refId="Package\SEQC Refresh DimDepartmentGroup\SQL Audit End DimDepartmentGroup" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimDepartmentGroup_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{F01BAF71-26C9-4174-8F83-DA858D0AFA31}" DTS:EvalOp="1" DTS:Expression="@DimDepartmentGroupRequired" DTS:From="Package\SEQC Refresh DimDepartmentGroup\SQL Check Required DimDepartmentGroup" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimDepartmentGroup_To_SQL Audit Start DimDepartmentGroup" DTS:refId="Package\SEQC Refresh DimDepartmentGroup.PrecedenceConstraints[Constraint_SQL Check Required DimDepartmentGroup_To_SQL Audit Start DimDepartmentGroup]" DTS:To="Package\SEQC Refresh DimDepartmentGroup\SQL Audit Start DimDepartmentGroup"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{B683DF88-3C94-4416-A413-A90CAB5CCA82}" DTS:From="Package\SEQC Refresh DimDepartmentGroup\SQL Audit Start DimDepartmentGroup" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimDepartmentGroup_To_SQL Merge DimDepartmentGroup" DTS:refId="Package\SEQC Refresh DimDepartmentGroup.PrecedenceConstraints[Constraint_SQL Audit Start DimDepartmentGroup_To_SQL Merge DimDepartmentGroup]" DTS:To="Package\SEQC Refresh DimDepartmentGroup\SQL Merge DimDepartmentGroup"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{E48BE379-38C3-4582-98B3-513F48D030E9}" DTS:From="Package\SEQC Refresh DimDepartmentGroup\SQL Merge DimDepartmentGroup" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimDepartmentGroup_To_SQL Audit End DimDepartmentGroup" DTS:refId="Package\SEQC Refresh DimDepartmentGroup.PrecedenceConstraints[Constraint_SQL Merge DimDepartmentGroup_To_SQL Audit End DimDepartmentGroup]" DTS:To="Package\SEQC Refresh DimDepartmentGroup\SQL Audit End DimDepartmentGroup"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{E8F9C32C-5C43-4559-BE8F-3F154D65119B}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimDepartmentGroupRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{34CE2EBF-3A10-4FCF-8B6E-E95F674B04F0}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimEmployee" DTS:refId="Package\SEQC Refresh DimEmployee">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{BFBD8B42-E9B5-4934-9F90-93AE9F4CB606}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimEmployee" DTS:refId="Package\SEQC Refresh DimEmployee\SQL Check Required DimEmployee" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimEmployee_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimEmployeeRequired" SQLTask:ResultName="DimEmployeeRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{EF1F0648-BE6F-4EC2-91FD-3F0596BFDE04}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimEmployee" DTS:refId="Package\SEQC Refresh DimEmployee\SQL Audit Start DimEmployee" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimEmployee_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{7EB9DDEF-1A52-453C-9D7C-19E1606B3726}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimEmployee" DTS:refId="Package\SEQC Refresh DimEmployee\SQL Merge DimEmployee" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimEmployee_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{B37B27E1-B41E-4492-9405-93AD2F4665DB}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimEmployee" DTS:refId="Package\SEQC Refresh DimEmployee\SQL Audit End DimEmployee" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimEmployee_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{F2F9DCCD-BE10-4BFA-8514-71B00D202062}" DTS:EvalOp="1" DTS:Expression="@DimEmployeeRequired" DTS:From="Package\SEQC Refresh DimEmployee\SQL Check Required DimEmployee" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimEmployee_To_SQL Audit Start DimEmployee" DTS:refId="Package\SEQC Refresh DimEmployee.PrecedenceConstraints[Constraint_SQL Check Required DimEmployee_To_SQL Audit Start DimEmployee]" DTS:To="Package\SEQC Refresh DimEmployee\SQL Audit Start DimEmployee"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{A09EBE49-6BFA-4719-B877-3A916CA06AD0}" DTS:From="Package\SEQC Refresh DimEmployee\SQL Audit Start DimEmployee" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimEmployee_To_SQL Merge DimEmployee" DTS:refId="Package\SEQC Refresh DimEmployee.PrecedenceConstraints[Constraint_SQL Audit Start DimEmployee_To_SQL Merge DimEmployee]" DTS:To="Package\SEQC Refresh DimEmployee\SQL Merge DimEmployee"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{64E4FA63-68B7-4F42-AD5D-EE9F344F7BA6}" DTS:From="Package\SEQC Refresh DimEmployee\SQL Merge DimEmployee" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimEmployee_To_SQL Audit End DimEmployee" DTS:refId="Package\SEQC Refresh DimEmployee.PrecedenceConstraints[Constraint_SQL Merge DimEmployee_To_SQL Audit End DimEmployee]" DTS:To="Package\SEQC Refresh DimEmployee\SQL Audit End DimEmployee"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{FE6E4241-F2F5-4438-871A-5346961957AC}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimEmployeeRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{807DE872-ACF8-4960-8041-5E11A02BC95D}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimGeography" DTS:refId="Package\SEQC Refresh DimGeography">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{9B5D6FDB-CE59-47BE-AE0F-185C5C7F584A}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimGeography" DTS:refId="Package\SEQC Refresh DimGeography\SQL Check Required DimGeography" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimGeography_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimGeographyRequired" SQLTask:ResultName="DimGeographyRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{8F8116CA-ECD2-4E37-BA92-A2BB2C5EDDF7}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimGeography" DTS:refId="Package\SEQC Refresh DimGeography\SQL Audit Start DimGeography" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimGeography_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{AF900B8B-0D13-4DF2-8AEF-B6C1245CD825}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimGeography" DTS:refId="Package\SEQC Refresh DimGeography\SQL Merge DimGeography" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimGeography_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{CA448F11-262F-4234-AB40-5E9F759CA429}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimGeography" DTS:refId="Package\SEQC Refresh DimGeography\SQL Audit End DimGeography" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimGeography_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{FBC58808-B3EF-4346-85E7-6F4D98994478}" DTS:EvalOp="1" DTS:Expression="@DimGeographyRequired" DTS:From="Package\SEQC Refresh DimGeography\SQL Check Required DimGeography" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimGeography_To_SQL Audit Start DimGeography" DTS:refId="Package\SEQC Refresh DimGeography.PrecedenceConstraints[Constraint_SQL Check Required DimGeography_To_SQL Audit Start DimGeography]" DTS:To="Package\SEQC Refresh DimGeography\SQL Audit Start DimGeography"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{3C51DED8-ACD1-419B-8C59-D93A4AFEDE6A}" DTS:From="Package\SEQC Refresh DimGeography\SQL Audit Start DimGeography" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimGeography_To_SQL Merge DimGeography" DTS:refId="Package\SEQC Refresh DimGeography.PrecedenceConstraints[Constraint_SQL Audit Start DimGeography_To_SQL Merge DimGeography]" DTS:To="Package\SEQC Refresh DimGeography\SQL Merge DimGeography"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{E6FF5144-A7E8-40D3-AFE0-A28E042499F5}" DTS:From="Package\SEQC Refresh DimGeography\SQL Merge DimGeography" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimGeography_To_SQL Audit End DimGeography" DTS:refId="Package\SEQC Refresh DimGeography.PrecedenceConstraints[Constraint_SQL Merge DimGeography_To_SQL Audit End DimGeography]" DTS:To="Package\SEQC Refresh DimGeography\SQL Audit End DimGeography"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{AC12C0B9-CA77-4B8C-95B0-19D659D3E1B9}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimGeographyRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{7597C896-8100-4D63-91D5-432111ACEAD7}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimOrganization" DTS:refId="Package\SEQC Refresh DimOrganization">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{D1D5C14A-DD27-4021-812E-B3C05E417293}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimOrganization" DTS:refId="Package\SEQC Refresh DimOrganization\SQL Check Required DimOrganization" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimOrganization_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimOrganizationRequired" SQLTask:ResultName="DimOrganizationRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{F0B21BE0-AFC8-4184-8644-31EB022AC8F7}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimOrganization" DTS:refId="Package\SEQC Refresh DimOrganization\SQL Audit Start DimOrganization" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimOrganization_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{82811EC9-09C2-4B30-BC37-B6C91DE149D2}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimOrganization" DTS:refId="Package\SEQC Refresh DimOrganization\SQL Merge DimOrganization" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimOrganization_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{8380D5F2-6C57-4F06-86FE-C2BBFE274B9B}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimOrganization" DTS:refId="Package\SEQC Refresh DimOrganization\SQL Audit End DimOrganization" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimOrganization_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{7A706C44-62B8-4672-AA35-1ADC3BD16658}" DTS:EvalOp="1" DTS:Expression="@DimOrganizationRequired" DTS:From="Package\SEQC Refresh DimOrganization\SQL Check Required DimOrganization" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimOrganization_To_SQL Audit Start DimOrganization" DTS:refId="Package\SEQC Refresh DimOrganization.PrecedenceConstraints[Constraint_SQL Check Required DimOrganization_To_SQL Audit Start DimOrganization]" DTS:To="Package\SEQC Refresh DimOrganization\SQL Audit Start DimOrganization"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{5A21F149-454D-4F10-B00E-9807ECE44F07}" DTS:From="Package\SEQC Refresh DimOrganization\SQL Audit Start DimOrganization" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimOrganization_To_SQL Merge DimOrganization" DTS:refId="Package\SEQC Refresh DimOrganization.PrecedenceConstraints[Constraint_SQL Audit Start DimOrganization_To_SQL Merge DimOrganization]" DTS:To="Package\SEQC Refresh DimOrganization\SQL Merge DimOrganization"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{AFA7BD78-743D-4EF5-88E9-9849074A2ED2}" DTS:From="Package\SEQC Refresh DimOrganization\SQL Merge DimOrganization" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimOrganization_To_SQL Audit End DimOrganization" DTS:refId="Package\SEQC Refresh DimOrganization.PrecedenceConstraints[Constraint_SQL Merge DimOrganization_To_SQL Audit End DimOrganization]" DTS:To="Package\SEQC Refresh DimOrganization\SQL Audit End DimOrganization"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{4238B573-DE54-4E7D-B04D-6C637BF1DAD3}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimOrganizationRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{B376B2CC-41CD-49BF-AF79-E8151869EA7C}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimProduct" DTS:refId="Package\SEQC Refresh DimProduct">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{ECB13908-8E1C-44D9-A7C8-B8D2A6DE82C1}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimProduct" DTS:refId="Package\SEQC Refresh DimProduct\SQL Check Required DimProduct" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimProduct_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimProductRequired" SQLTask:ResultName="DimProductRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{6847738F-1DFF-4838-84F7-43437F0464DA}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimProduct" DTS:refId="Package\SEQC Refresh DimProduct\SQL Audit Start DimProduct" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimProduct_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{A5024AF5-A031-48F3-B8BE-F07275068617}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimProduct" DTS:refId="Package\SEQC Refresh DimProduct\SQL Merge DimProduct" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimProduct_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{955A53E0-61D1-4721-AFE5-43C1B3AA134A}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimProduct" DTS:refId="Package\SEQC Refresh DimProduct\SQL Audit End DimProduct" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimProduct_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{5D03CDD3-BC9E-4BC9-BEB3-F2A878EF5B23}" DTS:EvalOp="1" DTS:Expression="@DimProductRequired" DTS:From="Package\SEQC Refresh DimProduct\SQL Check Required DimProduct" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimProduct_To_SQL Audit Start DimProduct" DTS:refId="Package\SEQC Refresh DimProduct.PrecedenceConstraints[Constraint_SQL Check Required DimProduct_To_SQL Audit Start DimProduct]" DTS:To="Package\SEQC Refresh DimProduct\SQL Audit Start DimProduct"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{CDC25E4A-E329-42F2-A64F-31FA7A6FF1DA}" DTS:From="Package\SEQC Refresh DimProduct\SQL Audit Start DimProduct" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimProduct_To_SQL Merge DimProduct" DTS:refId="Package\SEQC Refresh DimProduct.PrecedenceConstraints[Constraint_SQL Audit Start DimProduct_To_SQL Merge DimProduct]" DTS:To="Package\SEQC Refresh DimProduct\SQL Merge DimProduct"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{FEDCE1F0-D638-4E02-A0E3-D5C45ADF9DB9}" DTS:From="Package\SEQC Refresh DimProduct\SQL Merge DimProduct" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimProduct_To_SQL Audit End DimProduct" DTS:refId="Package\SEQC Refresh DimProduct.PrecedenceConstraints[Constraint_SQL Merge DimProduct_To_SQL Audit End DimProduct]" DTS:To="Package\SEQC Refresh DimProduct\SQL Audit End DimProduct"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{03919926-EE11-4E49-8897-CE9C61FCB5ED}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimProductRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{D8CC327C-E7A0-4D6E-9151-533C1E336894}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimProductCategory" DTS:refId="Package\SEQC Refresh DimProductCategory">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{64615015-53AE-4CF1-82BC-78CCADF980B2}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimProductCategory" DTS:refId="Package\SEQC Refresh DimProductCategory\SQL Check Required DimProductCategory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimProductCategory_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimProductCategoryRequired" SQLTask:ResultName="DimProductCategoryRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{D6EC24CB-6396-42C7-A49E-F6BFF0776476}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimProductCategory" DTS:refId="Package\SEQC Refresh DimProductCategory\SQL Audit Start DimProductCategory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimProductCategory_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{D1E10415-CDCD-4010-B766-E7A1489A7295}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimProductCategory" DTS:refId="Package\SEQC Refresh DimProductCategory\SQL Merge DimProductCategory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimProductCategory_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{290CE09F-DF1A-4464-B8F0-1F7B8EB76D50}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimProductCategory" DTS:refId="Package\SEQC Refresh DimProductCategory\SQL Audit End DimProductCategory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimProductCategory_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{AF820A5E-3F60-4687-97F7-51EF462C5C98}" DTS:EvalOp="1" DTS:Expression="@DimProductCategoryRequired" DTS:From="Package\SEQC Refresh DimProductCategory\SQL Check Required DimProductCategory" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimProductCategory_To_SQL Audit Start DimProductCategory" DTS:refId="Package\SEQC Refresh DimProductCategory.PrecedenceConstraints[Constraint_SQL Check Required DimProductCategory_To_SQL Audit Start DimProductCategory]" DTS:To="Package\SEQC Refresh DimProductCategory\SQL Audit Start DimProductCategory"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{4E37799F-DB8C-4399-A1C3-653A1AEB0A13}" DTS:From="Package\SEQC Refresh DimProductCategory\SQL Audit Start DimProductCategory" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimProductCategory_To_SQL Merge DimProductCategory" DTS:refId="Package\SEQC Refresh DimProductCategory.PrecedenceConstraints[Constraint_SQL Audit Start DimProductCategory_To_SQL Merge DimProductCategory]" DTS:To="Package\SEQC Refresh DimProductCategory\SQL Merge DimProductCategory"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{A71D6CF6-C93B-4A5A-B3BE-031B260616EA}" DTS:From="Package\SEQC Refresh DimProductCategory\SQL Merge DimProductCategory" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimProductCategory_To_SQL Audit End DimProductCategory" DTS:refId="Package\SEQC Refresh DimProductCategory.PrecedenceConstraints[Constraint_SQL Merge DimProductCategory_To_SQL Audit End DimProductCategory]" DTS:To="Package\SEQC Refresh DimProductCategory\SQL Audit End DimProductCategory"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{BD64B030-A0CC-4FC0-9274-FCE1859FB984}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimProductCategoryRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{72AFB634-71A2-4AA5-A4EE-AC0C60FF3E15}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimProductSubcategory" DTS:refId="Package\SEQC Refresh DimProductSubcategory">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{AB6C4739-674F-41E7-BAF9-944BC9FCA6E4}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimProductSubcategory" DTS:refId="Package\SEQC Refresh DimProductSubcategory\SQL Check Required DimProductSubcategory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimProductSubcategory_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimProductSubcategoryRequired" SQLTask:ResultName="DimProductSubcategoryRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{C83046C0-83B7-4F21-BE6C-E8B1473056EA}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimProductSubcategory" DTS:refId="Package\SEQC Refresh DimProductSubcategory\SQL Audit Start DimProductSubcategory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimProductSubcategory_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{48CD8E5E-1771-4FB6-8DFA-ACE90930F284}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimProductSubcategory" DTS:refId="Package\SEQC Refresh DimProductSubcategory\SQL Merge DimProductSubcategory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimProductSubcategory_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{AB73EC0E-8290-46C4-9CD3-E809F5236838}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimProductSubcategory" DTS:refId="Package\SEQC Refresh DimProductSubcategory\SQL Audit End DimProductSubcategory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimProductSubcategory_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{6EB94C81-E67B-44D2-B737-90F264A9993D}" DTS:EvalOp="1" DTS:Expression="@DimProductSubcategoryRequired" DTS:From="Package\SEQC Refresh DimProductSubcategory\SQL Check Required DimProductSubcategory" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimProductSubcategory_To_SQL Audit Start DimProductSubcategory" DTS:refId="Package\SEQC Refresh DimProductSubcategory.PrecedenceConstraints[Constraint_SQL Check Required DimProductSubcategory_To_SQL Audit Start DimProductSubcategory]" DTS:To="Package\SEQC Refresh DimProductSubcategory\SQL Audit Start DimProductSubcategory"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{416DFB26-D382-47ED-ADF0-BC9CB228866B}" DTS:From="Package\SEQC Refresh DimProductSubcategory\SQL Audit Start DimProductSubcategory" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimProductSubcategory_To_SQL Merge DimProductSubcategory" DTS:refId="Package\SEQC Refresh DimProductSubcategory.PrecedenceConstraints[Constraint_SQL Audit Start DimProductSubcategory_To_SQL Merge DimProductSubcategory]" DTS:To="Package\SEQC Refresh DimProductSubcategory\SQL Merge DimProductSubcategory"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{7CE42E57-D22E-45D3-B988-0233636BDB0C}" DTS:From="Package\SEQC Refresh DimProductSubcategory\SQL Merge DimProductSubcategory" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimProductSubcategory_To_SQL Audit End DimProductSubcategory" DTS:refId="Package\SEQC Refresh DimProductSubcategory.PrecedenceConstraints[Constraint_SQL Merge DimProductSubcategory_To_SQL Audit End DimProductSubcategory]" DTS:To="Package\SEQC Refresh DimProductSubcategory\SQL Audit End DimProductSubcategory"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{AD51F94B-1AE7-4A4E-998E-2076416CBFCF}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimProductSubcategoryRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{787ABEE8-98A7-4BBC-9849-30028A16833A}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimPromotion" DTS:refId="Package\SEQC Refresh DimPromotion">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{325B51B5-1DAD-4B68-920A-D655190C1231}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimPromotion" DTS:refId="Package\SEQC Refresh DimPromotion\SQL Check Required DimPromotion" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimPromotion_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimPromotionRequired" SQLTask:ResultName="DimPromotionRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{770BA6DA-5416-4A28-8474-21D3B15B33DE}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimPromotion" DTS:refId="Package\SEQC Refresh DimPromotion\SQL Audit Start DimPromotion" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimPromotion_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{67EF321B-29B8-481F-AA58-8D92C0845513}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimPromotion" DTS:refId="Package\SEQC Refresh DimPromotion\SQL Merge DimPromotion" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimPromotion_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{932AAD3C-6B2F-46B4-83CB-E8904ABE6CDC}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimPromotion" DTS:refId="Package\SEQC Refresh DimPromotion\SQL Audit End DimPromotion" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimPromotion_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{A0280105-FA62-4C99-95A0-0C7A6EAC5ACF}" DTS:EvalOp="1" DTS:Expression="@DimPromotionRequired" DTS:From="Package\SEQC Refresh DimPromotion\SQL Check Required DimPromotion" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimPromotion_To_SQL Audit Start DimPromotion" DTS:refId="Package\SEQC Refresh DimPromotion.PrecedenceConstraints[Constraint_SQL Check Required DimPromotion_To_SQL Audit Start DimPromotion]" DTS:To="Package\SEQC Refresh DimPromotion\SQL Audit Start DimPromotion"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{4EDEC551-0DE4-4661-99BE-74981DE5171E}" DTS:From="Package\SEQC Refresh DimPromotion\SQL Audit Start DimPromotion" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimPromotion_To_SQL Merge DimPromotion" DTS:refId="Package\SEQC Refresh DimPromotion.PrecedenceConstraints[Constraint_SQL Audit Start DimPromotion_To_SQL Merge DimPromotion]" DTS:To="Package\SEQC Refresh DimPromotion\SQL Merge DimPromotion"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{91D79CAA-9692-4202-8810-0FB5494414D1}" DTS:From="Package\SEQC Refresh DimPromotion\SQL Merge DimPromotion" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimPromotion_To_SQL Audit End DimPromotion" DTS:refId="Package\SEQC Refresh DimPromotion.PrecedenceConstraints[Constraint_SQL Merge DimPromotion_To_SQL Audit End DimPromotion]" DTS:To="Package\SEQC Refresh DimPromotion\SQL Audit End DimPromotion"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{AF01712E-2944-4EA0-AC5C-C34C667212F5}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimPromotionRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{296B0DBC-5605-4B12-B326-D0568B51BBC7}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimReseller" DTS:refId="Package\SEQC Refresh DimReseller">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{2E702BED-C846-49AD-B83C-8C89857481CF}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimReseller" DTS:refId="Package\SEQC Refresh DimReseller\SQL Check Required DimReseller" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimReseller_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimResellerRequired" SQLTask:ResultName="DimResellerRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{15D3CAB9-C2D9-4C04-90C5-929B4E98C38C}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimReseller" DTS:refId="Package\SEQC Refresh DimReseller\SQL Audit Start DimReseller" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimReseller_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{A7D0AF43-639F-40B0-9150-8B03C187C0E2}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimReseller" DTS:refId="Package\SEQC Refresh DimReseller\SQL Merge DimReseller" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimReseller_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{E272C740-9F16-4AEF-945C-3EF62EC70C38}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimReseller" DTS:refId="Package\SEQC Refresh DimReseller\SQL Audit End DimReseller" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimReseller_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{04B13794-B327-4706-A0D6-41154AE35D08}" DTS:EvalOp="1" DTS:Expression="@DimResellerRequired" DTS:From="Package\SEQC Refresh DimReseller\SQL Check Required DimReseller" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimReseller_To_SQL Audit Start DimReseller" DTS:refId="Package\SEQC Refresh DimReseller.PrecedenceConstraints[Constraint_SQL Check Required DimReseller_To_SQL Audit Start DimReseller]" DTS:To="Package\SEQC Refresh DimReseller\SQL Audit Start DimReseller"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{AB24A204-B275-4F06-B6F7-60446EA0F3C6}" DTS:From="Package\SEQC Refresh DimReseller\SQL Audit Start DimReseller" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimReseller_To_SQL Merge DimReseller" DTS:refId="Package\SEQC Refresh DimReseller.PrecedenceConstraints[Constraint_SQL Audit Start DimReseller_To_SQL Merge DimReseller]" DTS:To="Package\SEQC Refresh DimReseller\SQL Merge DimReseller"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{A460D8F6-3781-435D-B88D-CAADB6556EFA}" DTS:From="Package\SEQC Refresh DimReseller\SQL Merge DimReseller" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimReseller_To_SQL Audit End DimReseller" DTS:refId="Package\SEQC Refresh DimReseller.PrecedenceConstraints[Constraint_SQL Merge DimReseller_To_SQL Audit End DimReseller]" DTS:To="Package\SEQC Refresh DimReseller\SQL Audit End DimReseller"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{01C8F1FE-FAA8-43F4-9CF7-CA4878E6B691}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimResellerRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{E46CB540-C36D-42D0-94CB-2500C7B58BC6}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimSalesReason" DTS:refId="Package\SEQC Refresh DimSalesReason">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{8F622A0D-2DAA-4F27-9708-73DECEBE9EB4}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimSalesReason" DTS:refId="Package\SEQC Refresh DimSalesReason\SQL Check Required DimSalesReason" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimSalesReason_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimSalesReasonRequired" SQLTask:ResultName="DimSalesReasonRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{7195F083-9431-40B0-B27D-8A853D9BA895}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimSalesReason" DTS:refId="Package\SEQC Refresh DimSalesReason\SQL Audit Start DimSalesReason" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimSalesReason_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{7FA783F2-6FE3-458F-81F0-5C0B8934B067}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimSalesReason" DTS:refId="Package\SEQC Refresh DimSalesReason\SQL Merge DimSalesReason" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimSalesReason_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{C7A37553-EBCB-4FC2-A132-F524EE5B7C73}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimSalesReason" DTS:refId="Package\SEQC Refresh DimSalesReason\SQL Audit End DimSalesReason" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimSalesReason_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{DA8624C2-C810-4695-BA7C-36E40B14FC26}" DTS:EvalOp="1" DTS:Expression="@DimSalesReasonRequired" DTS:From="Package\SEQC Refresh DimSalesReason\SQL Check Required DimSalesReason" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimSalesReason_To_SQL Audit Start DimSalesReason" DTS:refId="Package\SEQC Refresh DimSalesReason.PrecedenceConstraints[Constraint_SQL Check Required DimSalesReason_To_SQL Audit Start DimSalesReason]" DTS:To="Package\SEQC Refresh DimSalesReason\SQL Audit Start DimSalesReason"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{9DACABED-3309-4586-9D79-2FBC9F16E35B}" DTS:From="Package\SEQC Refresh DimSalesReason\SQL Audit Start DimSalesReason" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimSalesReason_To_SQL Merge DimSalesReason" DTS:refId="Package\SEQC Refresh DimSalesReason.PrecedenceConstraints[Constraint_SQL Audit Start DimSalesReason_To_SQL Merge DimSalesReason]" DTS:To="Package\SEQC Refresh DimSalesReason\SQL Merge DimSalesReason"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{A053F173-1687-4FA7-8BA2-5AEB63179801}" DTS:From="Package\SEQC Refresh DimSalesReason\SQL Merge DimSalesReason" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimSalesReason_To_SQL Audit End DimSalesReason" DTS:refId="Package\SEQC Refresh DimSalesReason.PrecedenceConstraints[Constraint_SQL Merge DimSalesReason_To_SQL Audit End DimSalesReason]" DTS:To="Package\SEQC Refresh DimSalesReason\SQL Audit End DimSalesReason"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{83985786-1F60-419F-BE2A-2580AD954C20}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimSalesReasonRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{D5392440-B408-4C4B-A59D-1B01B3E47C62}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimSalesTerritory" DTS:refId="Package\SEQC Refresh DimSalesTerritory">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{DC5DF0A2-35A2-40E9-B2EF-0F1802DAB4BB}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimSalesTerritory" DTS:refId="Package\SEQC Refresh DimSalesTerritory\SQL Check Required DimSalesTerritory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimSalesTerritory_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimSalesTerritoryRequired" SQLTask:ResultName="DimSalesTerritoryRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{E84392A7-4ADE-404B-AE65-017A6FF4C775}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimSalesTerritory" DTS:refId="Package\SEQC Refresh DimSalesTerritory\SQL Audit Start DimSalesTerritory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimSalesTerritory_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{18204F5E-6972-48C8-9584-88D9C521E180}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimSalesTerritory" DTS:refId="Package\SEQC Refresh DimSalesTerritory\SQL Merge DimSalesTerritory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimSalesTerritory_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{D29C898C-F473-4315-8E0F-269EDF58BCFC}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimSalesTerritory" DTS:refId="Package\SEQC Refresh DimSalesTerritory\SQL Audit End DimSalesTerritory" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimSalesTerritory_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{551E85DD-3B8A-491C-9DD8-4340DA50028E}" DTS:EvalOp="1" DTS:Expression="@DimSalesTerritoryRequired" DTS:From="Package\SEQC Refresh DimSalesTerritory\SQL Check Required DimSalesTerritory" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimSalesTerritory_To_SQL Audit Start DimSalesTerritory" DTS:refId="Package\SEQC Refresh DimSalesTerritory.PrecedenceConstraints[Constraint_SQL Check Required DimSalesTerritory_To_SQL Audit Start DimSalesTerritory]" DTS:To="Package\SEQC Refresh DimSalesTerritory\SQL Audit Start DimSalesTerritory"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{099AE82E-1C7E-4B02-BD18-4A158DFF4EF2}" DTS:From="Package\SEQC Refresh DimSalesTerritory\SQL Audit Start DimSalesTerritory" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimSalesTerritory_To_SQL Merge DimSalesTerritory" DTS:refId="Package\SEQC Refresh DimSalesTerritory.PrecedenceConstraints[Constraint_SQL Audit Start DimSalesTerritory_To_SQL Merge DimSalesTerritory]" DTS:To="Package\SEQC Refresh DimSalesTerritory\SQL Merge DimSalesTerritory"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{B207C1FF-F16C-4C02-92D7-B5CC6F098C15}" DTS:From="Package\SEQC Refresh DimSalesTerritory\SQL Merge DimSalesTerritory" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimSalesTerritory_To_SQL Audit End DimSalesTerritory" DTS:refId="Package\SEQC Refresh DimSalesTerritory.PrecedenceConstraints[Constraint_SQL Merge DimSalesTerritory_To_SQL Audit End DimSalesTerritory]" DTS:To="Package\SEQC Refresh DimSalesTerritory\SQL Audit End DimSalesTerritory"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{9039A39C-06BD-41CA-8BA7-8F50390658E6}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimSalesTerritoryRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{6E95425C-EE00-419C-B511-9E60364556FA}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="SEQC Refresh DimScenario" DTS:refId="Package\SEQC Refresh DimScenario">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{9F8D981F-CFD1-448A-A5A7-3F3283D435A4}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Check Required DimScenario" DTS:refId="Package\SEQC Refresh DimScenario\SQL Check Required DimScenario" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="import.pr_DimScenario_CheckRequired" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::DimScenarioRequired" SQLTask:ResultName="DimScenarioRequired"></SQLTask:ResultBinding>
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{F94D250D-174E-4F26-A111-82E9563AD156}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit Start DimScenario" DTS:refId="Package\SEQC Refresh DimScenario\SQL Audit Start DimScenario" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimScenario_AuditStart" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{82999B27-42DF-46A8-B961-03FFED0E6245}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Merge DimScenario" DTS:refId="Package\SEQC Refresh DimScenario\SQL Merge DimScenario" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimScenario_Merge" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{1DA8A05E-3EB1-4002-80D4-8BB5D4AC4920}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="SQL Audit End DimScenario" DTS:refId="Package\SEQC Refresh DimScenario\SQL Audit End DimScenario" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="MyConn" SQLTask:SqlStatementSource="import.pr_DimScenario_AuditEnd" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask"></SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{AB97D975-19EE-43CD-9989-B3000EF98B75}" DTS:EvalOp="1" DTS:Expression="@DimScenarioRequired" DTS:From="Package\SEQC Refresh DimScenario\SQL Check Required DimScenario" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Check Required DimScenario_To_SQL Audit Start DimScenario" DTS:refId="Package\SEQC Refresh DimScenario.PrecedenceConstraints[Constraint_SQL Check Required DimScenario_To_SQL Audit Start DimScenario]" DTS:To="Package\SEQC Refresh DimScenario\SQL Audit Start DimScenario"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{94378161-BACD-42F6-BD78-1E6359AD38FE}" DTS:From="Package\SEQC Refresh DimScenario\SQL Audit Start DimScenario" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Audit Start DimScenario_To_SQL Merge DimScenario" DTS:refId="Package\SEQC Refresh DimScenario.PrecedenceConstraints[Constraint_SQL Audit Start DimScenario_To_SQL Merge DimScenario]" DTS:To="Package\SEQC Refresh DimScenario\SQL Merge DimScenario"></DTS:PrecedenceConstraint>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{34BF1663-23B3-438C-9A38-F04605D7F5B7}" DTS:From="Package\SEQC Refresh DimScenario\SQL Merge DimScenario" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_SQL Merge DimScenario_To_SQL Audit End DimScenario" DTS:refId="Package\SEQC Refresh DimScenario.PrecedenceConstraints[Constraint_SQL Merge DimScenario_To_SQL Audit End DimScenario]" DTS:To="Package\SEQC Refresh DimScenario\SQL Audit End DimScenario"></DTS:PrecedenceConstraint>
+      </DTS:PrecedenceConstraints>
+      <DTS:Variables>
+        <DTS:Variable DTS:CreationName="" DTS:DTSID="{7C6E710D-F568-4A02-BDAF-833B02DFA52A}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="DimScenarioRequired">
+          <DTS:VariableValue DTS:DataType="11">True</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>

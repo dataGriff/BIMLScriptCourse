@@ -1,0 +1,32 @@
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ template language="C#" tier="2" #>
+<#
+    string conn = @"Data Source=GRIFF-PC\SQLEXPRESS2014;Persist Security Info=true;Integrated Security=SSPI;Initial Catalog=AdventureWorksDW2014";
+    string _table_name_sql = "select  TABLE_SCHEMA , table_name from INFORMATION_SCHEMA.TABLES  where TABLE_TYPE='BASE TABLE'"; 
+     
+    DataTable _table_names = new DataTable();
+    SqlDataAdapter _table_name_da = new SqlDataAdapter(_table_name_sql, conn);
+    _table_name_da.Fill(_table_names);  
+     
+#>
+ 
+ 
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+  <Connections>
+    <OleDbConnection Name="staging_db" ConnectionString="Provider=SQLNCLI11;Data Source=.\SQL2012;Persist Security Info=False;Integrated Security=SSPI;Initial Catalog=stage" />
+  </Connections>
+    <Packages>
+        <Package Name="001_Create_Staging" ConstraintMode="Linear">
+            <Tasks>
+                <# foreach(DataRow _table in _table_names.Rows) {    #>           
+                <ExecuteSQL Name="create_import_<#= _table["TABLE_SCHEMA"] #>_<#= _table["TABLE_NAME"] #>" ConnectionName="staging_db">
+                    <DirectInput>                      
+create table import.[<#= _table["TABLE_SCHEMA"] + "_" + _table["TABLE_NAME"] #>] ()
+                        </DirectInput>
+                </ExecuteSQL>
+                <# } #>
+            </Tasks>
+        </Package>
+    </Packages>
+</Biml>
